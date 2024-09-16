@@ -39,7 +39,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           const evaluator = ExpressionEvaluator();
           final eval = evaluator.eval(expression, {});
           _result = eval.toString();
-          _expression = '$_expression = $_result';
         } catch (e) {
           _result = 'Error';
         }
@@ -51,14 +50,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           final expression = Expression.parse(_expression);
           const evaluator = ExpressionEvaluator();
           final eval = evaluator.eval(expression, {});
-          final squareResult = (eval * eval).toString();
-          _expression = '($eval ^ 2) = $squareResult';
-          _result = squareResult;
+          _expression = '($eval)^2';
+          _result = (eval * eval).toString();
         } catch (e) {
           _result = 'Error';
         }
       } else {
-        if (_expression.endsWith('=') && value != 'C') {
+        if (_result.isNotEmpty && _expression.endsWith('=')) {
           _expression = _result + value;
           _result = '';
         } else {
@@ -75,7 +73,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     if (value == 'C') {
       backgroundColor = Colors.grey[700]!;
       textColor = Colors.white;
-    } else if (['/', '*', '-', '+', '^', '='].contains(value)) {
+    } else if (['/', '*', '-', '+', '=', '^'].contains(value)) {
       backgroundColor = Colors.blue;
       textColor = Colors.white;
     } else {
@@ -88,9 +86,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         padding: const EdgeInsets.all(4.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: backgroundColor, 
-            foregroundColor: textColor,  
-            padding: const EdgeInsets.all(20), 
+            backgroundColor: backgroundColor,
+            foregroundColor: textColor,
+            padding: const EdgeInsets.all(20),
             shape: const CircleBorder(),
           ),
           onPressed: () => _onButtonPressed(value),
@@ -112,9 +110,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           title: Text(
             'Zoe\'s Calculator',
             style: TextStyle(
-              fontSize: 35, 
-              fontWeight: FontWeight.bold, 
-              color: Colors.grey[700]
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
             ),
           ),
           centerTitle: true,
@@ -127,13 +125,28 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               padding: const EdgeInsets.all(16),
               color: Colors.blue[50],
               alignment: Alignment.bottomRight,
-              child: Text(
-                _expression,
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _expression,
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    _result,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 31,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
